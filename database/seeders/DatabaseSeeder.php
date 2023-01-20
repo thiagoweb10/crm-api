@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Demand;
+use App\Models\Priority;
+use App\Models\Request;
+use Database\Factories\DemandFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,9 +19,18 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call([
+            DepartamentSeeder::class,
+            PrioritySeeder::class,
+            RequestSeeder::class,
+            StatusSeeder::class,
+            SystemSeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class
+        ]);
+
+        
+        Demand::factory(50)->create();
+
     }
 }
