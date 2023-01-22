@@ -2,18 +2,47 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\v1\AuthController;
+use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\DemandController;
+use App\Http\Controllers\API\v1\SystemController;
+use App\Http\Controllers\API\v1\RequestController;
+use App\Http\Middleware\API\v1\ProtectedRouteAuth;
+use App\Http\Controllers\API\v1\PriorityController;
+use App\Http\Controllers\crm\DepartamentController;
+use App\Http\Controllers\API\v1\DemandStatusController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+    Route::prefix('v1')->group(function(){
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+        Route::post('login', [AuthController::class, 'login']);
+        Route::get('demand', [DemandController::class, 'index']);
+        
+        Route::middleware([ProtectedRouteAuth::class])->group(function(){
+            Route::post('me', [AuthController::class, 'me']);
+            Route::post('logout', [AuthController::class, 'logout']);
+            Route::get('departament', [DepartamentController::class, 'index']);
+            
+            //Route::get('demand', [DemandController::class, 'index']);
+            //Route::post('demand', [DemandController::class, 'store']);
+            
+            Route::get('request', [RequestController::class, 'index']);
+            Route::get('status', [DemandStatusController::class, 'index']);
+            Route::get('user-profile', [UserController::class, 'getUserProfile']);
+
+            Route::resource('priority', PriorityController::class)
+            ->parameters(['priority' => 'priority'])
+            ->except('show');
+
+            Route::resource('system', SystemController::class)
+            ->parameters(['system' => 'system'])
+            ->except('show');
+        });
+
+        Route::get('valid', [AuthController::class, 'getValidToken']);
+    });
+
+    /*
+        Route::post('logout', 'AuthController@logout');
+        Route::post('refresh', 'AuthController@refresh');
+        Route::post('me', 'AuthController@me');
+    */
