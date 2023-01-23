@@ -15,8 +15,10 @@ use App\Http\Controllers\API\v1\DemandStatusController;
     Route::prefix('v1')->group(function(){
 
         Route::post('login', [AuthController::class, 'login']);
-        Route::get('demand', [DemandController::class, 'index']);
-        
+
+        Route::resource('demand', DemandController::class)
+        ->parameters(['demand' => 'demand']);
+
         Route::middleware([ProtectedRouteAuth::class])->group(function(){
             Route::post('me', [AuthController::class, 'me']);
             Route::post('logout', [AuthController::class, 'logout']);

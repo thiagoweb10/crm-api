@@ -6,13 +6,20 @@ use App\Models\Demand;
 
 class DemandService {
 
+    public $demand;
+
+    function __construct(Demand $demand = null) 
+    {
+       (is_null($demand)) ??  $this->demand = $demand;
+    }
+
     public function getData($request)
     {
         $oDemand  = Demand::with(['priority','request','sistem','status','createdBy','developer']);
         $oDemands = $this->getDataFilter($oDemand, $request);
         $oDemands = $oDemands->paginate(20);
 
-        return response()->json($oDemands, 200);
+        return $oDemands;
     }
 
     protected function getDataFilter($oDemand, $request)
@@ -29,18 +36,16 @@ class DemandService {
         return $oDemand;
     }
 
-    public function show($id)
-    {
-        $aDemand = Demand::find($id);
-
-        return $aDemand;
+    public function getDataByID($demand)
+    {   
+        return Demand::find($demand);
     }
 
     public function store($data)
     {
         Demand::create($data);
 
-        return ['status' => 'Demanda cadasrada com sucesso!'];
+        return 'Demanda cadastrada com sucesso!';
     }
 
     public function update($request, $demand)
@@ -48,17 +53,13 @@ class DemandService {
         $data = $request->validated();
         $demand->update($data);
 
-        return ['status' => 'Registro alterado com sucesso!'];
+        return  'Registro alterado com sucesso!';
     }
 
     public function destroy($demand)
     {
-        try {
-            $demand->delete();
+        $demand->delete();
 
-            return ['status' => 'success'];
-        } catch (\Exception $e) {
-            return ['error' => true, 'message' => $e->getMessage()];
-        }
+        return  'Demanda excluida com sucesso!';
     }
 }

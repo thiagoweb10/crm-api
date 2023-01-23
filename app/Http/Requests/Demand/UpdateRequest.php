@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     public function prepareForValidation()
     {
@@ -44,8 +44,8 @@ class CreateRequest extends FormRequest
             'system_id' => 'required',
             'created_by' => 'required',
             'developer_id' => 'sometimes',
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'sometimes',
+            'description' => 'sometimes',
             'comment' => 'sometimes',
             'date_estimated' => 'sometimes',
             'date_expected' => 'sometimes',
