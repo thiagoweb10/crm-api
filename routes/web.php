@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\User;
+use App\Models\Export;
+use App\Jobs\StoreExportDataJob;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +18,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::get('/teste-job', function () {
+
+    StoreExportDataJob::dispatch();
+
+    return 'Oi';
 });

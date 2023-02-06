@@ -67,12 +67,15 @@ class User extends Authenticatable
         return $this->hasMany(Demand::class, 'developer_id','id');
     }
 
+    public function exports()
+    {
+        return $this->hasMany(Export::class, 'user_id','id');
+    }
+
     public function setPasswordAttribute($value)
     {
         if (!is_null($value)) {
             $this->attributes['password'] = bcrypt($value);
         }
     }
-
-   
 }

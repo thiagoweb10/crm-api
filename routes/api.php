@@ -10,6 +10,7 @@ use App\Http\Controllers\API\v1\RequestController;
 use App\Http\Middleware\API\v1\ProtectedRouteAuth;
 use App\Http\Controllers\API\v1\PriorityController;
 use App\Http\Controllers\crm\DepartamentController;
+use App\Http\Controllers\API\v1\DemandReportController;
 use App\Http\Controllers\API\v1\DemandStatusController;
 
     Route::prefix('v1')->group(function(){
@@ -18,6 +19,9 @@ use App\Http\Controllers\API\v1\DemandStatusController;
 
         Route::resource('demand', DemandController::class)
         ->parameters(['demand' => 'demand']);
+
+        Route::resource('export', DemandReportController::class)
+        ->parameters(['export' => 'export']);
 
         Route::middleware([ProtectedRouteAuth::class])->group(function(){
             Route::post('me', [AuthController::class, 'me']);

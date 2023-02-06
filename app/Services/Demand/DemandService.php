@@ -2,6 +2,7 @@
 namespace App\Services\Demand;
 
 use App\Models\Demand;
+use Illuminate\Http\Request;
 
 
 class DemandService {
@@ -10,30 +11,38 @@ class DemandService {
 
     function __construct(Demand $demand = null) 
     {
-       (is_null($demand)) ??  $this->demand = $demand;
+       (is_null($demand)) ?? $this->demand = $demand;
     }
 
-    public function getData($request)
+    public function getDataAllReport()
     {
         $oDemand  = Demand::with(['priority','request','sistem','status','createdBy','developer']);
-        $oDemands = $this->getDataFilter($oDemand, $request);
-        $oDemands = $oDemands->paginate(20);
+        $oDemands = $oDemand->get()->toArray();
 
         return $oDemands;
     }
 
+    public function getData($request, $btoExport = null)
+    {
+        $oDemand  = Demand::with(['priority','request','sistem','status','createdBy','developer']);
+        $oDemands = $this->getDataFilter($oDemand, $request);
+        $oReportData = (!is_null($btoExport)) ?  $oDemands->get() : $oDemands->paginate(20);
+
+        return $oReportData;
+    }
+
     protected function getDataFilter($oDemand, $request)
     {
-        if (!is_null($oDemand)) 
-        {
-            foreach (['status_id'=>'status', 'developer_id'=>'developer', 'request_id'=>'type_request'] as $column => $value) {
-                if ($request->input($value) > 0) {
-                    $oDemand .= $oDemand->where($column, $request->input($value));
+        if (!is_null($oDemand)) {
+            $oFilter = $oDemand;
+            foreach (['status_id', 'developer_id', 'request_id', 'priority_id', 'system_id', 'developer_id', 'status_id'] as $column) {
+                if (array_key_exists($column, $request)) {
+                    $oFilter = $oDemand->where($column, $request[$column]);
                 }
             }
         }
 
-        return $oDemand;
+        return $oFilter;
     }
 
     public function getDataByID($demand)
