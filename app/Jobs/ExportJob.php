@@ -26,7 +26,7 @@ class ExportJob implements ShouldQueue
     public function __construct(
         protected User $user,
         protected String $filename,
-        protected  $data,
+        protected Array $data,
         protected DemandService $service = new DemandService
     )
     {}
