@@ -30,6 +30,11 @@ use App\Http\Controllers\API\v1\DemandStatusController;
         Route::get('/request/export', [RequestController::class, 'export']);
         Route::resource('request', RequestController::class)
         ->parameters(['request' => 'request']);
+        
+
+        Route::get('/prioritie/export', [PriorityController::class, 'export']);
+        Route::resource('prioritie', PriorityController::class)
+        ->parameters(['prioritie' => 'priority']);
 
 
         /* 
