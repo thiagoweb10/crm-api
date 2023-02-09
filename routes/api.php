@@ -26,9 +26,14 @@ use App\Http\Controllers\API\v1\DemandStatusController;
         Route::resource('system', SystemController::class)
         ->parameters(['system' => 'system']);
 
-        
+
+        Route::get('/request/export', [RequestController::class, 'export']);
+        Route::resource('request', RequestController::class)
+        ->parameters(['request' => 'request']);
+
 
         /* 
+            
             Route::middleware([ProtectedRouteAuth::class])->group(function(){
                 Route::post('me', [AuthController::class, 'me']);
                 Route::post('logout', [AuthController::class, 'logout']);
