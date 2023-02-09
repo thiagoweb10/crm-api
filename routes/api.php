@@ -10,6 +10,7 @@ use App\Http\Controllers\API\v1\RequestController;
 use App\Http\Middleware\API\v1\ProtectedRouteAuth;
 use App\Http\Controllers\API\v1\PriorityController;
 use App\Http\Controllers\crm\DepartamentController;
+use App\Http\Controllers\API\v1\DepartmentController;
 use App\Http\Controllers\API\v1\DemandReportController;
 use App\Http\Controllers\API\v1\DemandStatusController;
 
@@ -35,6 +36,11 @@ use App\Http\Controllers\API\v1\DemandStatusController;
         Route::get('/prioritie/export', [PriorityController::class, 'export']);
         Route::resource('prioritie', PriorityController::class)
         ->parameters(['prioritie' => 'priority']);
+
+
+        Route::get('/department/export', [DepartmentController::class, 'export']);
+        Route::resource('department', DepartmentController::class)
+        ->parameters(['department' => 'department']);
 
 
         /* 
