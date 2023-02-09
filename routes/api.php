@@ -17,32 +17,39 @@ use App\Http\Controllers\API\v1\DemandStatusController;
 
         Route::post('login', [AuthController::class, 'login']);
 
+        Route::get('/demand/export', [DemandController::class, 'export']);
         Route::resource('demand', DemandController::class)
         ->parameters(['demand' => 'demand']);
 
-        Route::resource('export', DemandReportController::class)
-        ->parameters(['export' => 'export']);
 
-        Route::middleware([ProtectedRouteAuth::class])->group(function(){
-            Route::post('me', [AuthController::class, 'me']);
-            Route::post('logout', [AuthController::class, 'logout']);
-            Route::get('departament', [DepartamentController::class, 'index']);
-            
-            //Route::get('demand', [DemandController::class, 'index']);
-            //Route::post('demand', [DemandController::class, 'store']);
-            
-            Route::get('request', [RequestController::class, 'index']);
-            Route::get('status', [DemandStatusController::class, 'index']);
-            Route::get('user-profile', [UserController::class, 'getUserProfile']);
+        Route::get('/system/export', [SystemController::class, 'export']);
+        Route::resource('system', SystemController::class)
+        ->parameters(['system' => 'system']);
 
-            Route::resource('priority', PriorityController::class)
-            ->parameters(['priority' => 'priority'])
-            ->except('show');
+        
 
-            Route::resource('system', SystemController::class)
-            ->parameters(['system' => 'system'])
-            ->except('show');
-        });
+        /* 
+            Route::middleware([ProtectedRouteAuth::class])->group(function(){
+                Route::post('me', [AuthController::class, 'me']);
+                Route::post('logout', [AuthController::class, 'logout']);
+                Route::get('departament', [DepartamentController::class, 'index']);
+                
+                //Route::get('demand', [DemandController::class, 'index']);
+                //Route::post('demand', [DemandController::class, 'store']);
+                
+                Route::get('request', [RequestController::class, 'index']);
+                Route::get('status', [DemandStatusController::class, 'index']);
+                Route::get('user-profile', [UserController::class, 'getUserProfile']);
+
+                Route::resource('priority', PriorityController::class)
+                ->parameters(['priority' => 'priority'])
+                ->except('show');
+
+                //Route::resource('system', SystemController::class)
+                //->parameters(['system' => 'system'])
+                //->except('show');
+            });
+        */
 
         Route::get('valid', [AuthController::class, 'getValidToken']);
     });

@@ -2,17 +2,8 @@
 namespace App\Services\Demand;
 
 use App\Models\Demand;
-use Illuminate\Http\Request;
-
 
 class DemandService {
-
-    public $demand;
-
-    function __construct(Demand $demand = null) 
-    {
-       (is_null($demand)) ?? $this->demand = $demand;
-    }
 
     public function getDataAllReport()
     {

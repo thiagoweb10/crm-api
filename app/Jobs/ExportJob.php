@@ -5,6 +5,8 @@ namespace App\Jobs;
 use App\Models\User;
 use App\Exports\DataExport;
 use Illuminate\Bus\Queueable;
+use App\Exports\ExportProcess;
+use App\Exports\SystemExportMethod;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Services\Demand\DemandService;
 use Illuminate\Queue\SerializesModels;
@@ -13,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use App\Notifications\ReportCreatedNotification;
+
 
 class ExportJob implements ShouldQueue
 {
@@ -26,8 +29,7 @@ class ExportJob implements ShouldQueue
     public function __construct(
         protected User $user,
         protected String $filename,
-        protected Array $data,
-        protected DemandService $service = new DemandService
+        protected Object $oDataReport,
     )
     {}
 
@@ -38,9 +40,9 @@ class ExportJob implements ShouldQueue
      */
     public function handle()
     {
-        $oDemands = $this->service->getData($this->data, true);
+        $oDataExport = (new ExportProcess($this->oDataReport))->export();
 
-        Excel::store(new DataExport($oDemands->toArray())
+        Excel::store(new DataExport($oDataExport->toArray())
             ,'report/export/'.$this->filename
             ,'public'
         );

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Models\User;
 use App\Models\Demand;
+use App\Jobs\ExportJob;
 use Illuminate\Http\Request;
+use App\Jobs\StoreExportDataJob;
+use App\Exports\DemandExportMethod;
 use App\Http\Controllers\Controller;
 use App\Services\Demand\DemandService;
 use App\Http\Requests\Demand\CreateRequest;
@@ -105,5 +109,28 @@ class DemandController extends Controller
         }
 
         return response()->json($result['data'], $result['status']);
+    }
+
+    public function export(Request $request)
+    {
+        try {
+            $oUser = User::find(1);
+            $result['status'] = 200;            
+            $filename = "CRM-Demandas-".now()->format('Y-m-d-H_i').".xlsx";
+
+            StoreExportDataJob::withChain([
+                (new ExportJob($oUser, $filename, new DemandExportMethod($request->all()))),
+            ])->dispatch($oUser, $filename);
+
+            $result['data'] = 'Seu arquivo foi enviado para processamento e em breve estará disponível na pagina de Relatórios.';
+            
+        } catch (\Exception $e) {
+            $result = [
+                'status' => 500
+                ,'error' => $e->getMessage()
+            ];
+        }
+        
+        return response()->json($result, $result['status']);
     }
 }
