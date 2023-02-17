@@ -4,10 +4,9 @@ namespace App\Http\Controllers\API\v1;
 
 use auth;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\LoginRequest;
-use App\Services\Auth\LoginService;
 use App\Http\Controllers\Controller;
+use App\Services\Auth\LoginService;
 
 class AuthController extends Controller
 {
@@ -21,14 +20,22 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         try {
-            
-            $credentials = $request->validated();
-            $auth        = $this->loginService->execute($credentials);
 
-            return response()->json($auth, 200);
+            $credentials = $request->validated();
+
+            $result = [
+                'status' => 200
+                ,'data'  =>  $this->loginService->getAuthentication($credentials)
+            ];
+
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 200);
+            $result = [
+                'status' => 500
+                ,'error' => $e->getMessage()
+            ];
         }
+
+        return response()->json($result, $result['status']);
     }
 
     public function me()
@@ -52,19 +59,6 @@ class AuthController extends Controller
 
     public function getValidToken()
     {
-        try {
-            JWTAuth::parseToken()->authenticate();
-
-            return response()->json(['status' => 'valid'], 200);
-            
-        } catch (\Exception $e) {
-            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return response()->json(['status' => 'Token is Invalid'], 401);
-            }elseif ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return response()->json(['status' => 'Token is Expired'], 401);
-            }else {
-                return response()->json(['status' => 'Authorization token not found'], 401);
-            }
-        }
+       
     }
 }

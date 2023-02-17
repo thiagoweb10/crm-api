@@ -43,8 +43,14 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(function (Throwable $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                  'status' => 401,
+                  'success' => false,
+                  'message' => $e->getMessage()
+                ], 401);
+            }
         });
     }
 }

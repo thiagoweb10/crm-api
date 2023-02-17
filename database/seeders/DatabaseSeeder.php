@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         
-        Demand::factory(50000)->create();
+        Demand::factory(100)->create();
 
     }
 }

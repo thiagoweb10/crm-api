@@ -9,42 +9,42 @@ use App\Http\Controllers\API\v1\SystemController;
 use App\Http\Controllers\API\v1\RequestController;
 use App\Http\Middleware\API\v1\ProtectedRouteAuth;
 use App\Http\Controllers\API\v1\PriorityController;
-use App\Http\Controllers\crm\DepartamentController;
 use App\Http\Controllers\API\v1\DepartmentController;
-use App\Http\Controllers\API\v1\DemandReportController;
-use App\Http\Controllers\API\v1\DemandStatusController;
+
 
     Route::prefix('v1')->group(function(){
-
+        
         Route::post('login', [AuthController::class, 'login']);
 
-        Route::get('/demand/export', [DemandController::class, 'export']);
-        Route::resource('demand', DemandController::class)
-        ->parameters(['demand' => 'demand']);
-
-
-        Route::get('/system/export', [SystemController::class, 'export']);
-        Route::resource('system', SystemController::class)
-        ->parameters(['system' => 'system']);
-
-
-        Route::get('/request/export', [RequestController::class, 'export']);
-        Route::resource('request', RequestController::class)
-        ->parameters(['request' => 'request']);
-        
-
-        Route::get('/prioritie/export', [PriorityController::class, 'export']);
-        Route::resource('prioritie', PriorityController::class)
-        ->parameters(['prioritie' => 'priority']);
-
-
-        Route::get('/department/export', [DepartmentController::class, 'export']);
-        Route::resource('department', DepartmentController::class)
-        ->parameters(['department' => 'department']);
+        Route::group(['middleware' => ['auth:sanctum']], function(){
+           
+            Route::get('/demand/export', [DemandController::class, 'export']);
+            Route::resource('demand', DemandController::class)
+            ->parameters(['demand' => 'demand']);
+    
+    
+            Route::get('/system/export', [SystemController::class, 'export']);
+            Route::resource('system', SystemController::class)
+            ->parameters(['system' => 'system']);
+    
+    
+            Route::get('/request/export', [RequestController::class, 'export']);
+            Route::resource('request', RequestController::class)
+            ->parameters(['request' => 'request']);
+            
+    
+            Route::get('/prioritie/export', [PriorityController::class, 'export']);
+            Route::resource('prioritie', PriorityController::class)
+            ->parameters(['prioritie' => 'priority']);
+    
+    
+            Route::get('/department/export', [DepartmentController::class, 'export']);
+            Route::resource('department', DepartmentController::class)
+            ->parameters(['department' => 'department']);
+        });
 
 
         /* 
-            
             Route::middleware([ProtectedRouteAuth::class])->group(function(){
                 Route::post('me', [AuthController::class, 'me']);
                 Route::post('logout', [AuthController::class, 'logout']);
