@@ -52,9 +52,9 @@ class User extends Authenticatable
       return $this->hasMany(Department::class, 'department_id','id');
     }
 
-    public function demandLog()
+    public function createdBydemandLog()
     {
-        return $this->hasMany(DemandLog::class,'user_id','id');
+        return $this->hasMany(DemandLog::class,'created_by','id');
     }
 
     public function createdBy()

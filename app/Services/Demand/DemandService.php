@@ -7,7 +7,7 @@ class DemandService {
 
     public function getDataAllReport()
     {
-        $oDemand  = Demand::with(['priority','request','sistem','status','createdBy','developer']);
+        $oDemand  = Demand::with(['priority','request','sistem','status','createdBy','developerBy']);
         $oDemands = $oDemand->get()->toArray();
 
         return $oDemands;
@@ -15,7 +15,7 @@ class DemandService {
 
     public function getData($request, $btoExport = null)
     {
-        $oDemand  = Demand::with(['priority','request','sistem','status','createdBy','developer']);
+        $oDemand  = Demand::with(['priority','request','sistem','status','createdBy','developerBy']);
         $oDemands = $this->getDataFilter($oDemand, $request);
         $oReportData = (!is_null($btoExport)) ?  $oDemands->get() : $oDemands->paginate(20);
 
@@ -43,23 +43,24 @@ class DemandService {
 
     public function store($data)
     {
-        Demand::create($data);
+        Demand::create($data)->log()->create($data);
 
         return 'Demanda cadastrada com sucesso!';
     }
 
     public function update($request, $demand)
     {
-        $data = $request->validated();
-        $demand->update($data);
+        $demand->update($request->validated());
+        
+        $demand->log()->create($request->validated());
 
-        return  'Registro alterado com sucesso!';
+        return 'Registro alterado com sucesso!';
     }
 
     public function destroy($demand)
     {
         $demand->delete();
 
-        return  'Demanda excluida com sucesso!';
+        return 'Demanda excluída com sucesso!';
     }
 }

@@ -12,12 +12,10 @@ class CreateRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'status_id'      => (is_null($this->status_id)) ? 1 :$this->status_id,
             'date_estimated' => Carbon::now()->toDateTimeString(),
             'date_expected'  => Carbon::now()->toDateTimeString(),
             'file_document'  => 'arquivo-word',
-            'created_by'     => 1
-            //'created_by'     => auth()->user()->id
+            'created_by'     => auth()->user()->id
         ]);
     }
     

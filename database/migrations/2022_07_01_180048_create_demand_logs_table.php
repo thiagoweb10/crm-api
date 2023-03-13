@@ -16,7 +16,8 @@ class CreateDemandLogsTable extends Migration
         Schema::create('demand_logs', function (Blueprint $table) {
             $table->id();
             $table->integer('demand_id')->unsigned()->constrained()->references('id')->on('demands');
-            $table->foreignId('user_id')->constrained()->references('id')->on('users');
+            $table->foreignId('created_by')->constrained()->references('id')->on('users');
+            $table->foreignId('developer_id')->constrained()->references('id')->on('users');
             $table->foreignId('status_id')->constrained()->references('id')->on('demand_statuses');
             $table->text('comment');
             $table->timestamps();

@@ -11,9 +11,10 @@ class DemandLog extends Model
 
     protected $fillable = [
         'demand_id',
-        'user_id',
+        'created_by',
+        'developer_id',
+        'status_id',
         'comment',
-        'status',
     ];
 
     public function demand()
@@ -21,8 +22,18 @@ class DemandLog extends Model
         return $this->belongsTo(Demand::class, 'demand_id','id');
     }
 
-    public function user()
+    public function createdBy()
     {
-        return $this->belongsTo(User::class, 'user_id','id');
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function developedBy()
+    {
+        return $this->belongsTo(User::class, 'developer_id','id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(DemandStatus::class, 'status_id','id');
     }
 }
